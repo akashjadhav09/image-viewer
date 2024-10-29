@@ -1,0 +1,55 @@
+.options-list{
+    border: 1px solid;
+    z-index: 1;
+    position: absolute;
+    padding: 10px;
+    width: 93px;
+    margin-top: 5px;
+    border-radius: 7px;
+    background-color: #faf8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0);
+}
+
+.show{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+.option-item{
+    padding: 5px;
+    cursor: pointer;
+}
+
+label{
+    margin-inline-start: 5px;
+    cursor: pointer;
+}
+
+.options-list input[type="radio"] {
+    margin-left: -5px;
+}
+
+.my-checkbox{
+    padding-bottom: 5px;
+}
+
+.title-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid;
+    width: 93px;
+    position: relative;
+    border-radius: 7px;    
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+}
+
+input[type="radio"] {
+    accent-color: #9b64ce; 
+    cursor: pointer;
+}

@@ -1,0 +1,60 @@
+.options-list{
+    order: 1px solid rgb(128 128 128 / 24%);
+    z-index: 1;
+    position: absolute;
+    padding: 10px;
+    width: 93px;
+    margin-top: 5px;
+    border-radius: 7px;
+    background-color: #faf8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0);
+}
+
+.show{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+.option-item{
+    padding: 5px;
+    cursor: pointer;
+}
+
+.label{
+    margin-left: 7px;
+    font-size: 16px;
+    cursor: pointer;    
+}
+
+.my-checkbox input[type="checkbox"] {
+    background-color: transparent;
+    color: currentColor;
+    width: 1em;
+    height: 1em;
+    transform: translateY(-0.075em);
+    border: 1.5px solid gray;
+    border-radius: 3px;
+    accent-color: #9b64ce;
+    cursor: pointer;
+    margin-left: -5px;
+}
+
+.my-checkbox{
+    padding-bottom: 5px;
+}
+
+.title-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid;
+    width: 95px;
+    position: relative;
+    border-radius: 7px;    
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+}

@@ -1,0 +1,22 @@
+[
+    {
+      "id": 1,
+      "graphic": {
+        "_src": "assets/alexander-andrews.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "188KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 2,
+      "graphic": {
+        "_src": "assets/friends-gossips.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    }
+]
