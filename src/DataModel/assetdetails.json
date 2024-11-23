@@ -2,7 +2,7 @@
     {
       "id": 1,
       "graphic": {
-        "_src": "assets/alexander-andrews.jpg",
+        "_src": "assets/page-header-3.jpg",
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "188KB",
@@ -12,7 +12,117 @@
     {
       "id": 2,
       "graphic": {
-        "_src": "assets/friends-gossips.jpg",
+        "_src": "assets/page-header-4.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 3,
+      "graphic": {
+        "_src": "assets/page-header-2.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 4,
+      "graphic": {
+        "_src": "assets/page-header-6.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 5,
+      "graphic": {
+        "_src": "assets/page-header-7.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 6,
+      "graphic": {
+        "_src": "assets/component-image-5.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 7,
+      "graphic": {
+        "_src": "assets/component-image-4.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 8,
+      "graphic": {
+        "_src": "assets/component-image3.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 9,
+      "graphic": {
+        "_src": "assets/component-image2.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 10,
+      "graphic": {
+        "_src": "assets/component-image1.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 11,
+      "graphic": {
+        "_src": "assets/page-header-2.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 12,
+      "graphic": {
+        "_src": "assets/page-header-3.jpg",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": ""
+      }
+    },
+    {
+      "id": 13,
+      "graphic": {
+        "_src": "assets/page-header-1.jpg",
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",

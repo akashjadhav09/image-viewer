@@ -1,5 +1,4 @@
 import  { React, useState } from "react";
-import { AssignmentTurnedIn } from "react-icons/md";
 
 import '../Gallary/Gallary-view.css';
 import AssetData from '../../DataModel/assetdetails.json';
@@ -38,6 +37,7 @@ function GalleryView() {
 
   function handleSelectedImageTypes(value){
     setSelectedOptions(value);
+    console.log("@ ", selectedOptions)
   }
 
   const currentImages = Data.slice(
@@ -69,7 +69,6 @@ function GalleryView() {
               className={index % 2 === 0 ? 'large' : 'small'}
             />
             <span className="open-in-popup-icon">
-              <AssignmentTurnedIn/>
             </span>
           </div>
         ))}
