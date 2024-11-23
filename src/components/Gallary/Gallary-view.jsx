@@ -1,4 +1,4 @@
-import  { React, useState } from "react";
+import  { React, useState, useEffect } from "react";
 
 import '../Gallary/Gallary-view.css';
 import AssetData from '../../DataModel/assetdetails.json';
@@ -22,10 +22,21 @@ function GalleryView() {
   const [Data, setData] = useState(AssetData);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [imagesToDisplay, setImagesToDisplay] = useState([]);
+  const [isPaginationButtonHidden, setisPaginationButtonHidden] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
   const imagesPerPage = 6;
   const totalPages = Math.ceil(Data.length / imagesPerPage);
+
+  
+  useEffect(() => {
+    const startIndex = currentPage * imagesPerPage;
+    const endIndex = (currentPage + 1) * imagesPerPage;
+    setImagesToDisplay(Data.slice(startIndex, endIndex));
+  }, [Data, currentPage, imagesPerPage]);
+
 
   const handleNext = () => {
     setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
@@ -35,15 +46,33 @@ function GalleryView() {
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
   };
 
-  function handleSelectedImageTypes(value){
-    setSelectedOptions(value);
-    console.log("@ ", selectedOptions)
+  function handleSelectedImageTypes(value) {   
+    setSelectedOptions(value); 
+
+    const filteredImages = Data.filter((image) => {
+        const filePath = image.graphic._src;
+        const extension = filePath.split('.').pop(); 
+        return value.includes(extension);
+    });
+
+    if(!filteredImages.length){
+      setisPaginationButtonHidden(true);
+    }
+
+    if(value.length){
+      setImagesToDisplay(filteredImages); 
+      // setisPaginationButtonHidden(true);
+    }else{
+      const startIndex = currentPage * imagesPerPage;
+      const endIndex = (currentPage + 1) * imagesPerPage;
+      setImagesToDisplay(Data.slice(startIndex, endIndex));
+      setisPaginationButtonHidden(false);
+    }
   }
 
-  const currentImages = Data.slice(
-    currentPage * imagesPerPage,
-    (currentPage + 1) * imagesPerPage
-  );
+  const handleDropdownToggle = (dropdownType) => {
+    setOpenDropdown((prev) => (prev === dropdownType ? null : dropdownType));
+  };
 
   return (
     <div className="gallery-view-main-container">
@@ -52,31 +81,48 @@ function GalleryView() {
       <div className="filter-wrapper">
         <input type="text" className="search-asset" placeholder="Search assets" />
         <div className="dropdown-wrapper">
-          <MultiSelectDropdown className="image-type-dropdown" options={options} onSelectOptions={handleSelectedImageTypes}/>
-          <SingleSelectDropdown title="Sort By" options={sortByOptions}/>
+          <MultiSelectDropdown 
+          className="image-type-dropdown" 
+          options={options} 
+          onSelectOptions={handleSelectedImageTypes} 
+          isOpen={openDropdown === "multi"}
+          onToggle={() => handleDropdownToggle("multi")}/>
+          
+          <SingleSelectDropdown 
+          title="Sort By" 
+          options={sortByOptions}  
+          isOpen={openDropdown === "single"}
+          onToggle={() => handleDropdownToggle("single")}/>
         </div>
       </div>
   
       <div className="gallery-wrapper-inner">
-        {currentImages.map((asset, index) => (
-          <div
-            className={`image-wrapper ${index % 2 === 0 ? 'large-image' : 'small-image'} ${assetIdToRemovemargin.includes(asset.id) ? 'remove-margin' : ''}`}
-            key={asset.id}
-          >
-            <img
-              src={asset.graphic._src}
-              alt={asset.graphic._altText}
-              className={index % 2 === 0 ? 'large' : 'small'}
-            />
-            <span className="open-in-popup-icon">
-            </span>
+        {imagesToDisplay.length ? (
+          imagesToDisplay.map((asset, index) => (
+            <div
+              className={`image-wrapper ${index % 2 === 0 ? 'large-image' : 'small-image'} ${
+                assetIdToRemovemargin.includes(asset.id) ? 'remove-margin' : ''
+              }`}
+              key={asset.id}
+            >
+              <img
+                src={asset.graphic._src}
+                alt={asset.graphic._altText}
+                className={index % 2 === 0 ? 'large' : 'small'}
+              />
+              <span className="open-in-popup-icon"></span>
+            </div>
+          ))
+        ) : (
+          <div className="not-found-asset">
+            <img src="assets/asset-not-found.png" /><span>Image Not Found</span>
           </div>
-        ))}
+        )}
       </div>
-  
+
       <div className="pagination-wrapper">
-        <button className={`btn ${currentPage == 0 ? 'remove-event' : 'add-event'}`} onClick={handlePrevious}>Previous</button>
-        <button className={`btn ${currentPage == 10 ? 'remove-event' : 'add-event'}`} onClick={handleNext}>Next</button>
+        <button className={`btn ${currentPage == 0 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handlePrevious}>Previous</button>
+        <button className={`btn ${currentPage == 10 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handleNext}>Next</button>
       </div>
     </div>
   </div>
