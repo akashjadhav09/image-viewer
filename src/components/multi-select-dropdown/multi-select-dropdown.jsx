@@ -3,7 +3,7 @@ import { MdArrowDropDown } from "react-icons/md";
 
 import './multi-select-dropdown.css'
 
-function MultiSelectDropdown({ options, onSelectOptions, isOpen, onToggle  }) {
+function MultiSelectDropdown({ options, onSelectOptions }) {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState([]); 
     const dropdownRef = useRef(null);
@@ -41,16 +41,12 @@ function MultiSelectDropdown({ options, onSelectOptions, isOpen, onToggle  }) {
         <div className="multi-select-dropdown-main">
             <div 
                 className="title-wrapper"  
-                onClick={(event) => {
-                event.stopPropagation();
-                onToggle("single");}}
+                onClick={(event) => {handleToggle(event)}}
             >
-
-                <div className="drop-down-title">File Type</div>
-                <MdArrowDropDown className="drop-down-icon"/>
+            <div className="drop-down-title">File Type</div>
+            <MdArrowDropDown className="drop-down-icon"/>
             </div>
-            {isOpen && (
-                <div id="multi-select-dropdown" className="options-list" ref={dropdownRef}>
+                <div id="multi-select-dropdown" className={`options-list ${isDropDownOpen ? 'show' : 'hide'}`} ref={dropdownRef}>
                 {isDropDownOpen && 
                     options.map((option,index)=>(
                         <div className="my-checkbox" key={index}>
@@ -62,9 +58,7 @@ function MultiSelectDropdown({ options, onSelectOptions, isOpen, onToggle  }) {
                         </div>
                     ))
                 }                
-            </div>
-            )}
-            
+            </div>   
         </div>
     );
 }

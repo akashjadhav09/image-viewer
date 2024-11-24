@@ -61,6 +61,7 @@
     border: 1px solid transparent;
     background-color: rgb(190, 126, 250);
     color: white;
+    font-weight: 500;
   }
 
   .remove-event{
@@ -75,10 +76,31 @@
 
   .search-asset{
     width: 50%;
+    outline: none;
+    border: 1px solid #f29ff2bf;
+    border-radius: 5px;
+    padding: 5px;
   }
 
   .not-found-asset {
     height: 20vh;
     width: 20vw;
   }
+
+  .image-wrapper {
+    position: relative;
+  }
+
+  .open-popup-icon-wrapper{
+    position: absolute;
+    right: 3px;
+    padding: 3px;
+    background-color: #fae6fd;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    top: 3px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
   
