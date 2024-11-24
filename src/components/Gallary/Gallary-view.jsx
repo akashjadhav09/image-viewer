@@ -1,7 +1,8 @@
-import  { React, useState, useEffect } from "react";
+import  { React, useState, useEffect, useRef } from "react";
 import { MdArrowOutward } from "react-icons/md";
 
 import '../Gallary/Gallary-view.css';
+
 import AssetData from '../../DataModel/assetdetails.json';
 import MultiSelectDropdown from '../multi-select-dropdown/multi-select-dropdown';
 import SingleSelectDropdown from '../single-select-dropdown/multi-select-dropdown/single-select-dropdown';
@@ -17,8 +18,8 @@ function GalleryView() {
   ]);
 
   const [sortByOptions, setsortByOptions] = useState([
-    { Title: "A To Z", value: "a-to-z" },
-    { Title: "Z To A", value: "z-to-a" }
+    { Title: "A To Z", value: "asc" },
+    { Title: "Z To A", value: "desc" }
   ]);
 
   const [Data, setData] = useState(AssetData);
@@ -28,7 +29,8 @@ function GalleryView() {
   const [isPaginationButtonHidden, setisPaginationButtonHidden] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const searchAssetRef = useRef(null);
+  
   const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
   const imagesPerPage = 6;
   const totalPages = Math.ceil(Data.length / imagesPerPage);
@@ -40,7 +42,6 @@ function GalleryView() {
     setImagesToDisplay(Data.slice(startIndex, endIndex));
   }, [Data, currentPage, imagesPerPage]);
 
-
   const handleNext = () => {
     setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
   };
@@ -49,27 +50,98 @@ function GalleryView() {
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
   };
 
-  function handleSelectedImageTypes(value) {   
-    setSelectedOptions(value); 
+  // below function return images by types. ex:- jpg,png,webp
+  // function handleSelectedImageTypes(value) {   
+  //   setSelectedOptions(value); 
 
+  //   const filteredImages = Data.filter((image) => {
+  //       const filePath = image.graphic._src;
+  //       const extension = filePath.split('.').pop(); 
+  //       return value.includes(extension);
+  //   });
+
+  //   if(!filteredImages.length){
+  //     setisPaginationButtonHidden(true);
+  //   }
+
+  //   if(value.length){
+  //     const paginatedAssets = getImagestoRenderPerPage(filteredImages);
+  //     setImagesToDisplay(paginatedAssets); 
+  //     console.log("imagesToDisplay-in-if ", imagesToDisplay)
+  //   }else{
+  //     const paginatedAssets = getImagestoRenderPerPage(Data);
+  //     setImagesToDisplay(paginatedAssets); 
+  //     console.log("imagesToDisplay-in-else ", imagesToDisplay)
+
+  //     setisPaginationButtonHidden(false);
+  //   }
+  // }
+
+  function handleSelectedImageTypes(value) {   
+    setSelectedOptions(value); // Update selected options
+
+    // Filter images based on selected extensions
     const filteredImages = Data.filter((image) => {
         const filePath = image.graphic._src;
-        const extension = filePath.split('.').pop(); 
+        const extension = filePath.split('.').pop().toLowerCase(); // Ensure case insensitivity
         return value.includes(extension);
     });
 
-    if(!filteredImages.length){
-      setisPaginationButtonHidden(true);
+    // Hide pagination button if no filtered images exist
+    if (!filteredImages.length) {
+        setisPaginationButtonHidden(true);
     }
 
-    if(value.length){
-      setImagesToDisplay(filteredImages); 
-    }else{
-      const startIndex = currentPage * imagesPerPage;
-      const endIndex = (currentPage + 1) * imagesPerPage;
-      setImagesToDisplay(Data.slice(startIndex, endIndex));
-      setisPaginationButtonHidden(false);
+    // Handle cases where value (extensions) is provided or not
+    const paginatedAssets = value.length 
+        ? getImagestoRenderPerPage(filteredImages) // Paginate filtered images
+        : getImagestoRenderPerPage(Data);         // Paginate all images if no filter
+
+    setImagesToDisplay(paginatedAssets); // Update the images to display
+    setisPaginationButtonHidden(!value.length && filteredImages.length === 0);
+
+    console.log("imagesToDisplay: ", paginatedAssets);
+}
+
+
+  // below function return images by filters. ex: a to z, z to a
+  function handleSelectedFilterTypes(value) {   
+    let sortedAssets;
+    let assetsToSort = [...Data];  
+
+    switch (value) {
+      case 'asc':
+        sortedAssets = assetsToSort.sort((a, b) => a.graphic._altText.localeCompare(b.graphic._altText));
+        break;
+
+      case 'desc':
+        sortedAssets = assetsToSort.sort((a, b) => b.graphic._altText.localeCompare(a.graphic._altText));
+        break;
+
+      default:
+        sortedAssets = Data;
+        break;
     }
+
+    const paginatedAssets = getImagestoRenderPerPage(sortedAssets);
+    setImagesToDisplay(paginatedAssets); 
+  }
+
+  //below function for search images by name
+  function handleSearchFilter(event) {   
+    const searchValue = event.target.value.toLowerCase();
+    const filteredAssets = Data.filter((asset) => 
+      asset.graphic._altText.toLowerCase().includes(searchValue) 
+    );
+
+    const paginatedAssets = getImagestoRenderPerPage(filteredAssets);
+    setImagesToDisplay(paginatedAssets); 
+  }
+
+  function getImagestoRenderPerPage(imagesToPaginate){
+    const startIndex = currentPage * imagesPerPage;
+    const endIndex = (currentPage + 1) * imagesPerPage;
+    return imagesToPaginate.slice(startIndex, endIndex);
   }
 
   const handleOpenModal = (asset) => {
@@ -87,7 +159,11 @@ function GalleryView() {
       <div className="gallery-wrapper-outer">
         <h5>Filters</h5>
         <div className="filter-wrapper">
-          <input type="text" className="search-asset" placeholder="Search assets" />
+          <input type="text" 
+          className="search-asset" 
+          placeholder="Search assets" 
+          onChange={handleSearchFilter} 
+          ref={searchAssetRef}/>
           
           <div className="dropdown-wrapper">            
             <MultiSelectDropdown 
@@ -99,7 +175,7 @@ function GalleryView() {
             <SingleSelectDropdown 
               title="Sort By" 
               options={sortByOptions}
-              onSelectOptions={handleSelectedImageTypes}   
+              onSelectOptions={handleSelectedFilterTypes}   
             />
           </div>
         </div>
@@ -124,6 +200,7 @@ function GalleryView() {
             >
               <MdArrowOutward className="open-in-popup-icon" title="open in popup" />
             </span>
+            <span>{asset.graphic._altText}</span>
           </div>
         ))
       ) : (
@@ -139,6 +216,8 @@ function GalleryView() {
           onClose={handleCloseModal}
           title={selectedItem.graphic._altText} 
           imagePath={selectedItem.graphic._src}
+          imageSize={selectedItem.graphic._size}
+          imageExtension={selectedItem.graphic._src.split('.').pop()}
         />
       )}
     </div>

@@ -6,7 +6,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "188KB",
-        "_altText": "page-header-3"
+        "_altText": "pratik"
       }
     },
     {
@@ -26,7 +26,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": "page-header-2"
+        "_altText": "Dipak"
       }
     },
     {
@@ -66,7 +66,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": "component-image-4"
+        "_altText": "John matwik"
       }
     },
     {
@@ -76,7 +76,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": ""
+        "_altText": "akash"
       }
     },
     {
@@ -86,7 +86,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": ""
+        "_altText": "suraj"
       }
     },
     {
@@ -96,7 +96,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": ""
+        "_altText": "rohit"
       }
     },
     {
@@ -106,7 +106,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": ""
+        "_altText": "mandar"
       }
     },
     {
@@ -116,7 +116,7 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": ""
+        "_altText": "vijay"
       }
     },
     {
@@ -126,7 +126,38 @@
         "_graphiczoom": false,
         "_type": "jpg",
         "_size": "98KB",
-        "_altText": ""
+        "_altText": "sumit"
+      }
+    }
+    ,
+    {
+      "id": 14,
+      "graphic": {
+        "_src": "assets/component-image3.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": "nikhil"
+      }
+    },
+    {
+      "id": 15,
+      "graphic": {
+        "_src": "assets/component-image-5.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": "yash"
+      }
+    },
+    {
+      "id": 16,
+      "graphic": {
+        "_src": "assets/component-image2.png",
+        "_graphiczoom": false,
+        "_type": "jpg",
+        "_size": "98KB",
+        "_altText": "kartik"
       }
     }
 ]

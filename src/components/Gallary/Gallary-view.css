@@ -83,8 +83,7 @@
   }
 
   .not-found-asset {
-    height: 20vh;
-    width: 20vw;
+    text-align: center;
   }
 
   .image-wrapper {

@@ -4,7 +4,7 @@ import { MdArrowDropDown } from "react-icons/md";
 import './single-select-dropdown.css'
 import '../../../../src/App.css'
 
-function SingleSelectDropdown({title, options}) {
+function SingleSelectDropdown({title, options, onSelectOptions}) {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -28,13 +28,7 @@ function SingleSelectDropdown({title, options}) {
     }
 
     const handleRadioButtonChange = (value) => {
-        console.log("handleRadioButtonChange ", value)
-        // const updatedOptions = selectedOptions.includes(value)
-        //     ? selectedOptions.filter((option) => option !== value) 
-        //     : [...selectedOptions, value]; 
-    
-        // setSelectedOptions(updatedOptions); 
-        // onSelectOptions(updatedOptions);
+        onSelectOptions(value);
     };
 
     return (

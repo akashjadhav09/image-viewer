@@ -2,7 +2,7 @@ import { MdClose } from "react-icons/md";
 
 import './popup.css'
 
-function ImagePopUpModal({isOpen, onClose, title, imagePath}) {
+function ImagePopUpModal({isOpen, onClose, title, imagePath, imageSize, imageExtension}) {
 
     if (!isOpen) return null;
 
@@ -20,6 +20,10 @@ function ImagePopUpModal({isOpen, onClose, title, imagePath}) {
                 </div>
                 <div className='image-container'>
                     <img src={imagePath}/>
+                </div>
+                <div className='image-size-container'>
+                    <span className='image-size'>Size : {imageSize || "512KB"} </span> 
+                    <span className='image-extension'>Extension : {imageExtension.toUpperCase() || "PNG"} </span>
                 </div>
             </div>
         </div>
