@@ -51,58 +51,31 @@ function GalleryView() {
   };
 
   // below function return images by types. ex:- jpg,png,webp
-  // function handleSelectedImageTypes(value) {   
-  //   setSelectedOptions(value); 
-
-  //   const filteredImages = Data.filter((image) => {
-  //       const filePath = image.graphic._src;
-  //       const extension = filePath.split('.').pop(); 
-  //       return value.includes(extension);
-  //   });
-
-  //   if(!filteredImages.length){
-  //     setisPaginationButtonHidden(true);
-  //   }
-
-  //   if(value.length){
-  //     const paginatedAssets = getImagestoRenderPerPage(filteredImages);
-  //     setImagesToDisplay(paginatedAssets); 
-  //     console.log("imagesToDisplay-in-if ", imagesToDisplay)
-  //   }else{
-  //     const paginatedAssets = getImagestoRenderPerPage(Data);
-  //     setImagesToDisplay(paginatedAssets); 
-  //     console.log("imagesToDisplay-in-else ", imagesToDisplay)
-
-  //     setisPaginationButtonHidden(false);
-  //   }
-  // }
-
   function handleSelectedImageTypes(value) {   
-    setSelectedOptions(value); // Update selected options
+    setSelectedOptions(value); 
 
-    // Filter images based on selected extensions
     const filteredImages = Data.filter((image) => {
         const filePath = image.graphic._src;
-        const extension = filePath.split('.').pop().toLowerCase(); // Ensure case insensitivity
+        const extension = filePath.split('.').pop(); 
         return value.includes(extension);
     });
 
-    // Hide pagination button if no filtered images exist
-    if (!filteredImages.length) {
-        setisPaginationButtonHidden(true);
+    if(!filteredImages.length){
+      setisPaginationButtonHidden(true);
     }
 
-    // Handle cases where value (extensions) is provided or not
-    const paginatedAssets = value.length 
-        ? getImagestoRenderPerPage(filteredImages) // Paginate filtered images
-        : getImagestoRenderPerPage(Data);         // Paginate all images if no filter
+    if(value.length){
+      const paginatedAssets = getImagestoRenderPerPage(filteredImages);
+      setImagesToDisplay(paginatedAssets); 
+      console.log("imagesToDisplay-in-if ", imagesToDisplay)
+    }else{
+      const paginatedAssets = getImagestoRenderPerPage(Data);
+      setImagesToDisplay(paginatedAssets); 
+      console.log("imagesToDisplay-in-else ", imagesToDisplay)
 
-    setImagesToDisplay(paginatedAssets); // Update the images to display
-    setisPaginationButtonHidden(!value.length && filteredImages.length === 0);
-
-    console.log("imagesToDisplay: ", paginatedAssets);
-}
-
+      setisPaginationButtonHidden(false);
+    }
+  }
 
   // below function return images by filters. ex: a to z, z to a
   function handleSelectedFilterTypes(value) {   
