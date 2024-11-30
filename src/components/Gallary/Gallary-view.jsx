@@ -1,5 +1,5 @@
-import  { React, useState, useEffect, useRef } from "react";
-import { MdArrowOutward } from "react-icons/md";
+import { React, useState, useEffect, useRef } from "react";
+import { MdArrowOutward, MdSunny, MdOutlineWbSunny } from "react-icons/md";
 
 import '../Gallary/Gallary-view.css';
 
@@ -30,6 +30,7 @@ function GalleryView() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const searchAssetRef = useRef(null);
+  const [isDark, setisDark] = useState(false);
   
   const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
   const imagesPerPage = 6;
@@ -127,33 +128,50 @@ function GalleryView() {
     setIsModalOpen(false);  
   };
 
-  return (
-    <div className="gallery-view-main-container">
-      <div className="gallery-wrapper-outer">
-        <h5>Filters</h5>
-        <div className="filter-wrapper">
-          <input type="text" 
-          className="search-asset" 
-          placeholder="Search assets" 
-          onChange={handleSearchFilter} 
-          ref={searchAssetRef}/>
-          
-          <div className="dropdown-wrapper">            
-            <MultiSelectDropdown 
-              className="image-type-dropdown" 
-              options={options} 
-              onSelectOptions={handleSelectedImageTypes} 
-            />
-              
-            <SingleSelectDropdown 
-              title="Sort By" 
-              options={sortByOptions}
-              onSelectOptions={handleSelectedFilterTypes}   
-            />
-          </div>
-        </div>
+  const toggleTheme = () => {
+    setisDark((prevTheme) => !prevTheme);
+  };
   
-      <div className="gallery-wrapper-inner">
+
+  return (
+    <div className={`gallery-view-main-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
+      <div className="gallery-wrapper-outer">       
+          <div className={`navbar-wrapper-outer ${isDark ? 'navbar-bg-color-dark' : 'navbar-bg-color-light'}`}>
+            <div className="filter-title-warpper">
+              <span>Filter</span>
+              <input type="text" 
+                className="search-asset" 
+                placeholder="Search assets" 
+                onChange={handleSearchFilter} 
+                ref={searchAssetRef}/>
+            </div>             
+                   
+            <div className="dropdown-wrapper">            
+              <MultiSelectDropdown 
+                className="image-type-dropdown" 
+                options={options} 
+                onSelectOptions={handleSelectedImageTypes} 
+              />
+                
+              <SingleSelectDropdown 
+                title="Sort By" 
+                options={sortByOptions}
+                onSelectOptions={handleSelectedFilterTypes}   
+              />
+
+              <div onClick={toggleTheme}>
+                {isDark ? (
+                  <MdOutlineWbSunny className="light-theme-icon" title="Light Mode" />
+                ) : (
+                  <MdSunny className="dark-theme-icon" title="Dark Mode" />
+                )}
+              </div>         
+            
+            </div>
+          </div>
+  
+      <div className={`${!imagesToDisplay.length ? 'image-not-found-wrapper' : 'gallery-wrapper-inner'}`}>
+      {/* {console.log("imagesToDisplay ", imagesToDisplay)} */}
       {imagesToDisplay.length ? (
         imagesToDisplay.map((asset, index) => (
           <div
@@ -163,6 +181,7 @@ function GalleryView() {
             key={asset.id}
           >
             <img
+              key={asset.id}
               src={asset.graphic._src}
               alt={asset.graphic._altText}
               className={index % 2 === 0 ? 'large' : 'small'}
@@ -179,7 +198,7 @@ function GalleryView() {
       ) : (
         <div className="not-found-asset">
           <img src="assets/asset-not-found.png" alt="Not Found" />
-          <span>Image Not Found</span>
+          <div>Image Not Found</div>
         </div>
       )}
 
