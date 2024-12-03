@@ -31,12 +31,13 @@ function GalleryView() {
   const [selectedItem, setSelectedItem] = useState(null);
   const searchAssetRef = useRef(null);
   const [isDark, setisDark] = useState(false);
+  const [paginationValue, setpaginationValue] = useState(Array.from({ length: Math.ceil(Data.length / 6) }, (_, index) => index + 1));
+  const [openIndex, setopenIndex] = useState(0);
   
   const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
   const imagesPerPage = 6;
   const totalPages = Math.ceil(Data.length / imagesPerPage);
-
-  
+   
   useEffect(() => {
     const startIndex = currentPage * imagesPerPage;
     const endIndex = (currentPage + 1) * imagesPerPage;
@@ -44,10 +45,12 @@ function GalleryView() {
   }, [Data, currentPage, imagesPerPage]);
 
   const handleNext = () => {
+    setopenIndex((prevIndex)=> (prevIndex+1))
     setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
   };
 
   const handlePrevious = () => {
+    setopenIndex((prevIndex)=> (prevIndex-1))
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
   };
 
@@ -212,7 +215,20 @@ function GalleryView() {
           imageExtension={selectedItem.graphic._src.split('.').pop()}
         />
       )}
-    </div>
+      
+    </div>  
+   
+    {paginationValue.length ? (
+      <div className="dot-wrapper">
+        {paginationValue.map((_asset, index) => (
+          <div 
+            key={index} 
+            className={`dot-container-inner dot ${openIndex === index ? 'item-dot-green' : ''}`}
+          ></div>
+        ))}
+      </div>
+    ) : null}
+
 
       <div className="pagination-wrapper">
         <button className={`btn ${currentPage == 0 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handlePrevious}>Previous</button>
