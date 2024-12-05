@@ -32,7 +32,9 @@ function GalleryView() {
   const searchAssetRef = useRef(null);
   const [isDark, setisDark] = useState(false);
   const [paginationValue, setpaginationValue] = useState(Array.from({ length: Math.ceil(Data.length / 6) }, (_, index) => index + 1));
-  const [openIndex, setopenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(0);
+  const [isHideNextBtn, setIsHideNextBtn] = useState(false);
+  const [isHidePrevBtn, setIsHidePrevBtn] = useState(false);
   
   const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
   const imagesPerPage = 6;
@@ -45,13 +47,23 @@ function GalleryView() {
   }, [Data, currentPage, imagesPerPage]);
 
   const handleNext = () => {
-    setopenIndex((prevIndex)=> (prevIndex+1))
+    setOpenIndex((prevIndex)=> (prevIndex+1))
     setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
+   
+    if(openIndex === totalPages) {     
+      setIsHideNextBtn(true);
+      setIsHidePrevBtn(false);
+    }
   };
 
   const handlePrevious = () => {
-    setopenIndex((prevIndex)=> (prevIndex-1))
+    setOpenIndex((prevIndex)=> (prevIndex-1))
     setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
+
+    if( openIndex === 1 ) {
+      setIsHidePrevBtn(true);
+      setIsHideNextBtn(false);
+    }
   };
 
   // below function return images by types. ex:- jpg,png,webp
@@ -229,10 +241,9 @@ function GalleryView() {
       </div>
     ) : null}
 
-
       <div className="pagination-wrapper">
-        <button className={`btn ${currentPage == 0 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handlePrevious}>Previous</button>
-        <button className={`btn ${currentPage == 10 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handleNext}>Next</button>
+        <button className={`btn ${isHidePrevBtn ? 'hidden' : 'visible'} ${currentPage == 0 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handlePrevious}>Previous</button>
+        <button className={`btn ${isHideNextBtn ? 'hidden' : 'visible'} ${currentPage == 10 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handleNext}>Next</button>
       </div>
 
     </div>

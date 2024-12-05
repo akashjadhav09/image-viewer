@@ -199,4 +199,12 @@
     gap: 0.5em;
   }
 
-  
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
