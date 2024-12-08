@@ -6,6 +6,7 @@ import '../../../../src/App.css'
 
 function SingleSelectDropdown({title, options, onSelectOptions}) {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
     const dropdownRef = useRef(null);
 
     useEffect(()=>{
@@ -28,6 +29,7 @@ function SingleSelectDropdown({title, options, onSelectOptions}) {
     }
 
     const handleRadioButtonChange = (value) => {
+        setSelectedOption(value);
         onSelectOptions(value);
     };
 
@@ -47,6 +49,7 @@ function SingleSelectDropdown({title, options, onSelectOptions}) {
                     type="radio" 
                     id={`sortby-${index}`}
                     onChange={()=> handleRadioButtonChange(option.value)}
+                    checked={selectedOption === option.value}
                     name="sortby" />
                     <label htmlFor={`sortby-${index}`}>{option.Title}</label>
                 </div>

@@ -29,6 +29,7 @@ function MultiSelectDropdown({ options, onSelectOptions }) {
     
         setSelectedOptions(updatedOptions); 
         onSelectOptions(updatedOptions);
+        
     };
     
     
@@ -52,6 +53,7 @@ function MultiSelectDropdown({ options, onSelectOptions }) {
                         <div className="my-checkbox" key={index}>
                             <input type="checkbox" 
                                 id={`image-type-${index}`} 
+                                checked={selectedOptions.includes(option.value)} 
                                 onChange={()=> handleCheckboxChange(option.value)}
                             /> 
                             <label htmlFor={`image-type-${index}`} className="label">{option.Title}</label>

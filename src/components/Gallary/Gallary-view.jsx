@@ -32,7 +32,7 @@ function GalleryView() {
   const searchAssetRef = useRef(null);
   const [isDark, setisDark] = useState(false);
   const [paginationValue, setpaginationValue] = useState(Array.from({ length: Math.ceil(Data.length / 6) }, (_, index) => index + 1));
-  const [openIndex, setOpenIndex] = useState(0);
+  let [openIndex, setOpenIndex] = useState(0);
   const [isHideNextBtn, setIsHideNextBtn] = useState(false);
   const [isHidePrevBtn, setIsHidePrevBtn] = useState(false);
   
@@ -47,28 +47,43 @@ function GalleryView() {
   }, [Data, currentPage, imagesPerPage]);
 
   const handleNext = () => {
-    setOpenIndex((prevIndex)=> (prevIndex+1))
-    setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
-   
-    if(openIndex === totalPages) {     
-      setIsHideNextBtn(true);
+    console.log(imagesToDisplay)
+    setOpenIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      if (nextIndex === totalPages - 1) {
+        setIsHideNextBtn(true); 
+      } else {
+        setIsHideNextBtn(false); 
+      }
       setIsHidePrevBtn(false);
-    }
+      return nextIndex;
+    });
+  
+    setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
   };
-
+  
   const handlePrevious = () => {
-    setOpenIndex((prevIndex)=> (prevIndex-1))
-    setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
-
-    if( openIndex === 1 ) {
-      setIsHidePrevBtn(true);
+    setOpenIndex((prevIndex) => {
+      const prevIndexNew = prevIndex - 1;
+      if (prevIndexNew === 0) {
+        setIsHidePrevBtn(true); 
+      } else {
+        setIsHidePrevBtn(false); 
+      }
       setIsHideNextBtn(false);
-    }
+      return prevIndexNew;
+    });
+  
+    setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
   };
+  
 
   // below function return images by types. ex:- jpg,png,webp
   function handleSelectedImageTypes(value) {   
     setSelectedOptions(value); 
+
+    console.log("selectedOptions ", selectedOptions)
+    console.log("value ", value)
 
     const filteredImages = Data.filter((image) => {
         const filePath = image.graphic._src;
@@ -78,18 +93,24 @@ function GalleryView() {
 
     if(!filteredImages.length){
       setisPaginationButtonHidden(true);
+      console.log(isPaginationButtonHidden)
     }
 
     if(value.length){
       const paginatedAssets = getImagestoRenderPerPage(filteredImages);
       setImagesToDisplay(paginatedAssets); 
-      console.log("imagesToDisplay-in-if ", imagesToDisplay)
-    }else{
+      if(paginatedAssets.length){
+        setisPaginationButtonHidden(false);
+      }else{
+        setisPaginationButtonHidden(true);
+      }
+    }
+    else{
       const paginatedAssets = getImagestoRenderPerPage(Data);
+      console.log("paginatedAssets ", paginatedAssets)
       setImagesToDisplay(paginatedAssets); 
-      console.log("imagesToDisplay-in-else ", imagesToDisplay)
-
       setisPaginationButtonHidden(false);
+      console.log(isPaginationButtonHidden)
     }
   }
 
@@ -186,7 +207,6 @@ function GalleryView() {
           </div>
   
       <div className={`${!imagesToDisplay.length ? 'image-not-found-wrapper' : 'gallery-wrapper-inner'}`}>
-      {/* {console.log("imagesToDisplay ", imagesToDisplay)} */}
       {imagesToDisplay.length ? (
         imagesToDisplay.map((asset, index) => (
           <div
@@ -230,21 +250,23 @@ function GalleryView() {
       
     </div>  
    
-    {paginationValue.length ? (
-      <div className="dot-wrapper">
-        {paginationValue.map((_asset, index) => (
-          <div 
-            key={index} 
-            className={`dot-container-inner dot ${openIndex === index ? 'item-dot-green' : ''}`}
-          ></div>
-        ))}
-      </div>
-    ) : null}
+    <div className="pagination-wrapper-outer">      
+      {paginationValue.length ? (
+        <div className="dot-wrapper">
+          {paginationValue.map((_asset, index) => (
+            <div 
+              key={index} 
+              className={`dot-container-inner dot ${openIndex === index ? 'item-dot-green' : ''} ${isPaginationButtonHidden ? 'hidden' : 'visible'}`}
+            ></div>
+          ))}
+        </div>
+      ) : null}
 
       <div className="pagination-wrapper">
-        <button className={`btn ${isHidePrevBtn ? 'hidden' : 'visible'} ${currentPage == 0 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handlePrevious}>Previous</button>
-        <button className={`btn ${isHideNextBtn ? 'hidden' : 'visible'} ${currentPage == 10 ? 'remove-event' : 'add-event'} ${isPaginationButtonHidden ? 'hide' : 'show'}`} onClick={handleNext}>Next</button>
+        <button className={`btn ${isHidePrevBtn || isPaginationButtonHidden ? 'hidden' : 'visible'} `} onClick={handlePrevious}>Previous</button>
+        <button className={`btn ${isHideNextBtn || isPaginationButtonHidden ? 'hidden' : 'visible'} `} onClick={handleNext}>Next</button>
       </div>
+    </div>
 
     </div>
   </div>
