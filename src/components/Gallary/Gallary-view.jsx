@@ -36,84 +36,117 @@ function GalleryView() {
   const [isHideNextBtn, setIsHideNextBtn] = useState(false);
   const [isHidePrevBtn, setIsHidePrevBtn] = useState(false);
   
-  const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
+  // const assetIdToRemovemargin = [5,11,17,23,29,35,41,47,53,59,65]
+  const assetIdToRemovemargin = Array.from({ length: Math.ceil(Data.length / 6) }, (_, i) => 5 + i * 6);
+
   const imagesPerPage = 6;
   const totalPages = Math.ceil(Data.length / imagesPerPage);
    
   useEffect(() => {
+    const images = selectedOptions.length
+      ? Data.filter((image) => {
+          const filePath = image.graphic._src;
+          const extension = filePath.split('.').pop();
+          return selectedOptions.includes(extension);
+        })
+      : Data; // Show all images when no option is selected
+  
     const startIndex = currentPage * imagesPerPage;
-    const endIndex = (currentPage + 1) * imagesPerPage;
-    setImagesToDisplay(Data.slice(startIndex, endIndex));
-  }, [Data, currentPage, imagesPerPage]);
+    const endIndex = startIndex + imagesPerPage;
+        console.log("@ ", currentPage - 1);
+        
+    if(currentPage === 0){
+      setIsHidePrevBtn(true);
+    }else{
+      setIsHidePrevBtn(false);
+    }
+
+    setImagesToDisplay(images.slice(startIndex, endIndex));
+  }, [Data, currentPage, imagesPerPage, selectedOptions]);
+  
+  
 
   const handleNext = () => {
-    console.log(imagesToDisplay)
-    setOpenIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1;
-      if (nextIndex === totalPages - 1) {
-        setIsHideNextBtn(true); 
-      } else {
-        setIsHideNextBtn(false); 
+    const maxPages = selectedOptions.length
+      ? Math.ceil(
+          Data.filter((image) => {
+            const filePath = image.graphic._src;
+            const extension = filePath.split('.').pop();
+            return selectedOptions.includes(extension);
+          }).length / imagesPerPage
+        )
+      : totalPages;
+  
+    setCurrentPage((prevPage) => {      
+      const nextPage = prevPage + 1;
+      if (nextPage >= maxPages) {
+        setIsHideNextBtn(true);
+        return prevPage; // Prevent overflow
       }
       setIsHidePrevBtn(false);
-      return nextIndex;
+      return nextPage;
     });
-  
-    setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
+
+    setOpenIndex(currentPage + 1);
+    
+    if(currentPage + 2 >= totalPages){
+      setIsHideNextBtn(true);
+    }else{
+      setIsHideNextBtn(false);
+    }
+    console.log("next-totalPages ", totalPages)
+    console.log("next ", currentPage + 1)
   };
   
   const handlePrevious = () => {
-    setOpenIndex((prevIndex) => {
-      const prevIndexNew = prevIndex - 1;
-      if (prevIndexNew === 0) {
-        setIsHidePrevBtn(true); 
-      } else {
-        setIsHidePrevBtn(false); 
+    setCurrentPage((prevPage) => {
+      const prevPageIndex = prevPage - 1;
+      if (prevPageIndex < 0) {
+        setIsHidePrevBtn(true);
+        return prevPage; // Prevent underflow
       }
       setIsHideNextBtn(false);
-      return prevIndexNew;
+      return prevPageIndex;
     });
-  
-    setCurrentPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
+
+    setOpenIndex(currentPage - 1);
+   
+    if(currentPage - 1 === 0){
+      setIsHidePrevBtn(true);
+    }else{
+      setIsHidePrevBtn(false);
+    }
+    console.log("prev ", currentPage - 1)
   };
-  
 
   // below function return images by types. ex:- jpg,png,webp
-  function handleSelectedImageTypes(value) {   
-    setSelectedOptions(value); 
-
-    console.log("selectedOptions ", selectedOptions)
-    console.log("value ", value)
-
-    const filteredImages = Data.filter((image) => {
-        const filePath = image.graphic._src;
-        const extension = filePath.split('.').pop(); 
-        return value.includes(extension);
-    });
-
-    if(!filteredImages.length){
-      setisPaginationButtonHidden(true);
-      console.log(isPaginationButtonHidden)
-    }
-
-    if(value.length){
-      const paginatedAssets = getImagestoRenderPerPage(filteredImages);
-      setImagesToDisplay(paginatedAssets); 
-      if(paginatedAssets.length){
-        setisPaginationButtonHidden(false);
-      }else{
-        setisPaginationButtonHidden(true);
-      }
-    }
-    else{
-      const paginatedAssets = getImagestoRenderPerPage(Data);
-      console.log("paginatedAssets ", paginatedAssets)
-      setImagesToDisplay(paginatedAssets); 
+  function handleSelectedImageTypes(value) {
+    setSelectedOptions(value);
+  
+    const filteredImages = value.length
+      ? Data.filter((image) => {
+          const filePath = image.graphic._src;
+          const extension = filePath.split('.').pop();
+          return value.includes(extension);
+        })
+      : Data; // Use all images when no option is selected
+  
+    setCurrentPage(0); // Reset to the first page
+    setIsHideNextBtn(false); // Reset next button visibility
+    setIsHidePrevBtn(true); // Reset prev button visibility
+  
+    const startIndex = 0;
+    const endIndex = imagesPerPage;
+  
+    if (filteredImages.length) {
+      setImagesToDisplay(filteredImages.slice(startIndex, endIndex));
       setisPaginationButtonHidden(false);
-      console.log(isPaginationButtonHidden)
+    } else {
+      setImagesToDisplay([]);
+      setisPaginationButtonHidden(true);
     }
   }
-
+  
   // below function return images by filters. ex: a to z, z to a
   function handleSelectedFilterTypes(value) {   
     let sortedAssets;
@@ -205,14 +238,16 @@ function GalleryView() {
             
             </div>
           </div>
-  
+          
       <div className={`${!imagesToDisplay.length ? 'image-not-found-wrapper' : 'gallery-wrapper-inner'}`}>
       {imagesToDisplay.length ? (
         imagesToDisplay.map((asset, index) => (
           <div
-            className={`image-wrapper ${index % 2 === 0 ? 'large-image' : 'small-image'} ${
-              assetIdToRemovemargin.includes(asset.id) ? 'remove-margin' : ''
-            }`}
+            className={[
+              'image-wrapper',
+              index % 2 === 0 ? 'large-image' : 'small-image',
+              assetIdToRemovemargin.includes(asset.id) ? 'remove-margin' : '',
+            ].join(' ').trim()} 
             key={asset.id}
           >
             <img

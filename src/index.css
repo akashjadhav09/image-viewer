@@ -4,3 +4,7 @@
   margin: 0;
   font-family: "Poppins", sans-serif;
 }
+
+:root {
+  --border-color: ##723b7bf;
+}
