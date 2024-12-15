@@ -31,7 +31,7 @@ function GalleryView() {
   const [selectedItem, setSelectedItem] = useState(null);
   const searchAssetRef = useRef(null);
   const [isDark, setisDark] = useState(false);
-  const [paginationValue, setpaginationValue] = useState(Array.from({ length: Math.ceil(Data.length / 6) }, (_, index) => index + 1));
+  const [paginationValue, setPaginationValue] = useState(Array.from({ length: Math.ceil(Data.length / 6) }, (_, index) => index + 1));
   let [openIndex, setOpenIndex] = useState(0);
   const [isHideNextBtn, setIsHideNextBtn] = useState(false);
   const [isHidePrevBtn, setIsHidePrevBtn] = useState(false);
@@ -53,8 +53,7 @@ function GalleryView() {
   
     const startIndex = currentPage * imagesPerPage;
     const endIndex = startIndex + imagesPerPage;
-        console.log("@ ", currentPage - 1);
-        
+           
     if(currentPage === 0){
       setIsHidePrevBtn(true);
     }else{
@@ -62,10 +61,9 @@ function GalleryView() {
     }
 
     setImagesToDisplay(images.slice(startIndex, endIndex));
-  }, [Data, currentPage, imagesPerPage, selectedOptions]);
+  }, [Data, currentPage, imagesPerPage, selectedOptions, paginationValue]);
   
   
-
   const handleNext = () => {
     const maxPages = selectedOptions.length
       ? Math.ceil(
@@ -81,21 +79,20 @@ function GalleryView() {
       const nextPage = prevPage + 1;
       if (nextPage >= maxPages) {
         setIsHideNextBtn(true);
-        return prevPage; // Prevent overflow
+        return prevPage;
       }
       setIsHidePrevBtn(false);
       return nextPage;
     });
 
     setOpenIndex(currentPage + 1);
-    
-    if(currentPage + 2 >= totalPages){
+    // setPaginationValue(maxPages);
+
+    if(currentPage + 2 >= maxPages){
       setIsHideNextBtn(true);
     }else{
       setIsHideNextBtn(false);
     }
-    console.log("next-totalPages ", totalPages)
-    console.log("next ", currentPage + 1)
   };
   
   const handlePrevious = () => {
@@ -103,7 +100,7 @@ function GalleryView() {
       const prevPageIndex = prevPage - 1;
       if (prevPageIndex < 0) {
         setIsHidePrevBtn(true);
-        return prevPage; // Prevent underflow
+        return prevPage;
       }
       setIsHideNextBtn(false);
       return prevPageIndex;
@@ -116,7 +113,6 @@ function GalleryView() {
     }else{
       setIsHidePrevBtn(false);
     }
-    console.log("prev ", currentPage - 1)
   };
 
   // below function return images by types. ex:- jpg,png,webp
@@ -205,7 +201,7 @@ function GalleryView() {
   return (
     <div className={`gallery-view-main-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
       <div className="gallery-wrapper-outer">       
-          <div className={`navbar-wrapper-outer ${isDark ? 'navbar-bg-color-dark' : 'navbar-bg-color-light'}`}>
+          <div className={`navbar-wrapper-outer ${isDark ? 'navbar-bg-color-dark' : 'navbar-bg-color-light'} ${isModalOpen ? 'disable-event' : 'enable-event'}`}>
             <div className="filter-title-warpper">
               <span>Filter</span>
               <input type="text" 
@@ -213,7 +209,7 @@ function GalleryView() {
                 placeholder="Search assets" 
                 onChange={handleSearchFilter} 
                 ref={searchAssetRef}/>
-            </div>             
+            </div>                                                    
                    
             <div className="dropdown-wrapper">            
               <MultiSelectDropdown 
@@ -234,8 +230,7 @@ function GalleryView() {
                 ) : (
                   <MdSunny className="dark-theme-icon" title="Dark Mode" />
                 )}
-              </div>         
-            
+              </div>                     
             </div>
           </div>
           
@@ -280,6 +275,7 @@ function GalleryView() {
           imagePath={selectedItem.graphic._src}
           imageSize={selectedItem.graphic._size}
           imageExtension={selectedItem.graphic._src.split('.').pop()}
+          isDark={isDark}
         />
       )}
       
