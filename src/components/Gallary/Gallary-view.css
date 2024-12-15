@@ -27,6 +27,7 @@
     border-radius: 5px;
     padding: 5px;
     box-shadow: 5px 5px 9px #00000030;
+    min-height: 510px;
   }
     
   .large-image img {
@@ -80,7 +81,7 @@
 
   .search-asset{
     outline: none;
-    border: 1px solid #b723b7bf;
+    border: 1px solid;
     border-radius: 5px;
     padding: 5px;
     width: 300px;
@@ -216,4 +217,12 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+  }
+
+  .disable-event{
+    pointer-events: none;
+  }
+
+  .enable-event{
+    pointer-events: auto;
   }
